@@ -1,0 +1,87 @@
+{
+    "log": {
+        "loglevel": "debug"
+    },
+    "stats": {},
+    "api": {
+        "tag": "api",
+        "services": [
+            "HandlerService",
+            "LoggerService",
+            "StatsService"
+        ]
+    },
+    "policy": {
+        "levels": {
+            "0": {
+                "statsUserUplink": true,
+                "statsUserDownlink": true
+            }
+        },
+        "system": {
+            "statsInboundUplink": true,
+            "statsInboundDownlink": true,
+            "statsOutboundUplink": true,
+            "statsOutboundDownlink": true
+        }
+    },
+    "routing": {
+        "rules": [
+            {
+                "inboundTag": [
+                    "api"
+                ],
+                "outboundTag": "api",
+                "type": "field"
+            }
+        ],
+        "domainStrategy": "AsIs"
+    },
+    "inbounds": [
+        {
+            "port": 2334,
+            "listen": "127.0.0.1",
+            "protocol": "socks",
+            "settings": {
+                "udp": true
+            }
+        },
+        {
+            "tag": "api",
+            "listen": "127.0.0.1",
+            "port": 2335,
+            "protocol": "dokodemo-door",
+            "settings": {
+                "address": "127.0.0.1"
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "vless",
+            "settings": {
+                "vnext": [
+                    {
+                        "address": "gilfoylex.tk",
+                        "port": 443,
+                        "users": [
+                            {
+                                "id": "4369ee36-3565-4d4b-845f-7a7b397b5919",
+                                "flow": "xtls-rprx-direct",
+                                "encryption": "none",
+                                "level": 0
+                            }
+                        ]
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "xtls",
+                "xtlsSettings": {
+                    "serverName": "gilfoylex.tk"
+                }
+            }
+        }
+    ]
+}
